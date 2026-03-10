@@ -7,25 +7,25 @@
 body {
   margin:0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #ffe0b2, #b2dfdb); /* мягкий градиент */
+  background: linear-gradient(120deg, #ffe0b2, #b2dfdb);
   overflow:hidden;
   color:#333;
 }
 
 h1 {
   text-align:center;
-  font-size:100px;
+  font-size:120px;
   margin-top:40px;
   background: linear-gradient(90deg, #ff5252, #ffeb3b, #2196f3, #9c27b0);
   -webkit-background-clip: text;
   color: transparent;
   position: relative;
-  z-index: 100; /* поверх всего */
+  z-index: 100;
 }
 
 .sub {
   text-align:center;
-  font-size:36px;
+  font-size:40px;
   margin-top:10px;
   font-weight:bold;
   color:#333;
@@ -37,22 +37,23 @@ h1 {
   position:absolute;
   bottom:40px;
   left:40px;
-  font-size:24px;
+  font-size:28px; /* увеличили */
   line-height:1.5;
   font-weight:bold;
-  background: rgba(255,255,255,0.7); /* лёгкий фон, чтобы читалось */
-  padding:15px;
+  background: rgba(255,255,255,0.8);
+  padding:20px;
   border-radius:10px;
-  max-width:300px;
+  max-width:350px;
+  z-index:100;
 }
 
 .word {
   position:absolute;
   font-weight:bold;
-  opacity:0.7;
+  opacity:0.8;
   transform-origin:center center;
+  transition: all 5s linear;
 }
-
 </style>
 </head>
 
@@ -70,8 +71,8 @@ Andrii Hezhenko
 </div>
 
 <script>
-// хаотичные слова
-const words = ["Kishkibril","WiWiWiiiiii","Kishkibril","WiWiWiiiiii","Kishkibril"];
+// хаотичные слова с добавкой "best of the best"
+const words = ["best of the best Kishkibril","best of the best WiWiWiiiiii","best of the best Kishkibril","best of the best WiWiWiiiiii","best of the best Kishkibril"];
 const totalWords = 120;
 
 for(let i=0;i<totalWords;i++){
@@ -79,7 +80,7 @@ for(let i=0;i<totalWords;i++){
   span.className="word";
   span.innerText = words[Math.floor(Math.random()*words.length)];
 
-  // случайная позиция
+  // случайная стартовая позиция
   span.style.left = Math.random()*100 + "vw";
   span.style.top = Math.random()*100 + "vh";
 
@@ -89,13 +90,23 @@ for(let i=0;i<totalWords;i++){
   // случайный цвет
   span.style.color = `hsl(${Math.random()*360},70%,50%)`;
 
-  // случайный поворот
-  span.style.transform = `rotate(${Math.random()*360 - 180}deg)`;
-
-  // небольшой z-index, чтобы не перекрывать главное
-  span.style.zIndex = 10;
+  // случайный начальный поворот
+  let rot = Math.random()*360 - 180;
+  span.style.transform = `rotate(${rot}deg)`;
 
   document.body.appendChild(span);
+
+  // анимация движения
+  function moveWord(){
+    let x = Math.random()*100;
+    let y = Math.random()*100;
+    let angle = Math.random()*360 - 180;
+    span.style.left = x + "vw";
+    span.style.top = y + "vh";
+    span.style.transform = `rotate(${angle}deg)`;
+    setTimeout(moveWord, 4000 + Math.random()*3000); // каждые 4-7 секунд
+  }
+  moveWord();
 }
 </script>
 
