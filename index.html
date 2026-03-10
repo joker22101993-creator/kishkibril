@@ -3,87 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <title>Kishkibril</title>
-
 <style>
-
-body{
-margin:0;
-background:black;
-color:white;
-font-family:Arial;
-overflow:hidden;
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(120deg, #ffe0b2, #b2dfdb); /* мягкий градиент */
+  overflow:hidden;
+  color:#333;
 }
 
-h1{
-text-align:center;
-font-size:90px;
-margin-top:40px;
-background:linear-gradient(90deg, red, yellow, blue, green, purple);
--webkit-background-clip:text;
-color:transparent;
+h1 {
+  text-align:center;
+  font-size:100px;
+  margin-top:40px;
+  background: linear-gradient(90deg, #ff5252, #ffeb3b, #2196f3, #9c27b0);
+  -webkit-background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 100; /* поверх всего */
 }
 
-.sub{
-text-align:center;
-font-size:30px;
-margin-top:10px;
+.sub {
+  text-align:center;
+  font-size:36px;
+  margin-top:10px;
+  font-weight:bold;
+  color:#333;
+  position: relative;
+  z-index: 100;
 }
 
-.contact{
-position:absolute;
-bottom:40px;
-left:40px;
-font-size:20px;
+.contact {
+  position:absolute;
+  bottom:40px;
+  left:40px;
+  font-size:24px;
+  line-height:1.5;
+  font-weight:bold;
+  background: rgba(255,255,255,0.7); /* лёгкий фон, чтобы читалось */
+  padding:15px;
+  border-radius:10px;
+  max-width:300px;
 }
 
-.word{
-position:absolute;
-font-weight:bold;
-opacity:0.8;
+.word {
+  position:absolute;
+  font-weight:bold;
+  opacity:0.7;
+  transform-origin:center center;
 }
 
 </style>
-
 </head>
 
 <body>
 
 <h1>KISHKIBRIL</h1>
-
 <div class="sub">Kishkibril from MZH</div>
 
 <div class="contact">
 Contact Information:<br><br>
 Chief Executive Officer of Kishkibril:<br>
 Ivan Belmas<br><br>
-
 Executive Director of Kishkibril:<br>
 Andrii Hezhenko
 </div>
 
 <script>
-
+// хаотичные слова
 const words = ["Kishkibril","WiWiWiiiiii","Kishkibril","WiWiWiiiiii","Kishkibril"];
+const totalWords = 120;
 
-for(let i=0;i<120;i++){
+for(let i=0;i<totalWords;i++){
+  let span = document.createElement("span");
+  span.className="word";
+  span.innerText = words[Math.floor(Math.random()*words.length)];
 
-let span = document.createElement("span");
-span.className="word";
+  // случайная позиция
+  span.style.left = Math.random()*100 + "vw";
+  span.style.top = Math.random()*100 + "vh";
 
-span.innerText = words[Math.floor(Math.random()*words.length)];
+  // случайный размер
+  span.style.fontSize = (15 + Math.random()*35) + "px";
 
-span.style.left=Math.random()*100+"vw";
-span.style.top=Math.random()*100+"vh";
+  // случайный цвет
+  span.style.color = `hsl(${Math.random()*360},70%,50%)`;
 
-span.style.fontSize=(15+Math.random()*40)+"px";
+  // случайный поворот
+  span.style.transform = `rotate(${Math.random()*360 - 180}deg)`;
 
-span.style.color=`hsl(${Math.random()*360},100%,60%)`;
+  // небольшой z-index, чтобы не перекрывать главное
+  span.style.zIndex = 10;
 
-document.body.appendChild(span);
-
+  document.body.appendChild(span);
 }
-
 </script>
 
 </body>
-  </html>
+</html>
