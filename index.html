@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kishkibril</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:white;
+font-family:Arial;
+overflow:hidden;
+}
+
+h1{
+text-align:center;
+font-size:90px;
+margin-top:40px;
+background:linear-gradient(90deg, red, yellow, blue, green, purple);
+-webkit-background-clip:text;
+color:transparent;
+}
+
+.sub{
+text-align:center;
+font-size:30px;
+margin-top:10px;
+}
+
+.contact{
+position:absolute;
+bottom:40px;
+left:40px;
+font-size:20px;
+}
+
+.word{
+position:absolute;
+font-weight:bold;
+opacity:0.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>KISHKIBRIL</h1>
+
+<div class="sub">Kishkibril from MZH</div>
+
+<div class="contact">
+Contact Information:<br><br>
+Chief Executive Officer of Kishkibril:<br>
+Ivan Belmas<br><br>
+
+Executive Director of Kishkibril:<br>
+Andrii Hezhenko
+</div>
+
+<script>
+
+const words = ["Kishkibril","WiWiWiiiiii","Kishkibril","WiWiWiiiiii","Kishkibril"];
+
+for(let i=0;i<120;i++){
+
+let span = document.createElement("span");
+span.className="word";
+
+span.innerText = words[Math.floor(Math.random()*words.length)];
+
+span.style.left=Math.random()*100+"vw";
+span.style.top=Math.random()*100+"vh";
+
+span.style.fontSize=(15+Math.random()*40)+"px";
+
+span.style.color=`hsl(${Math.random()*360},100%,60%)`;
+
+document.body.appendChild(span);
+
+}
+
+</script>
+
+</body>
+  </html>
