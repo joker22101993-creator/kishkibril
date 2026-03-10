@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kishkibril</title>
 <style>
 body {
@@ -14,37 +15,38 @@ body {
 
 h1 {
   text-align:center;
-  font-size:120px;
-  margin-top:40px;
+  font-size:calc(10vw + 30px);
+  margin-top:20px;
   background: linear-gradient(90deg, #ff5252, #ffeb3b, #2196f3, #9c27b0);
   -webkit-background-clip: text;
   color: transparent;
   position: relative;
-  z-index: 100;
+  z-index: 999;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
 }
 
 .sub {
   text-align:center;
-  font-size:40px;
+  font-size:calc(5vw + 10px);
   margin-top:10px;
   font-weight:bold;
   color:#333;
   position: relative;
-  z-index: 100;
+  z-index: 999;
 }
 
 .contact {
   position:absolute;
-  bottom:40px;
-  left:40px;
-  font-size:28px; /* увеличили */
+  bottom:20px;
+  left:10px;
+  font-size:calc(3vw + 10px);
   line-height:1.5;
   font-weight:bold;
-  background: rgba(255,255,255,0.8);
-  padding:20px;
+  background: rgba(255,255,255,0.9);
+  padding:15px;
   border-radius:10px;
-  max-width:350px;
-  z-index:100;
+  max-width:90%;
+  z-index:999;
 }
 
 .word {
@@ -52,7 +54,22 @@ h1 {
   font-weight:bold;
   opacity:0.8;
   transform-origin:center center;
-  transition: all 5s linear;
+  pointer-events:none;
+  transition: all 0.3s ease;
+}
+
+#explosionButton {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  padding: 12px 20px;
+  background: #ff5252;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
 }
 </style>
 </head>
@@ -70,44 +87,111 @@ Executive Director of Kishkibril:<br>
 Andrii Hezhenko
 </div>
 
-<script>
-// хаотичные слова с добавкой "best of the best"
-const words = ["best of the best Kishkibril","best of the best WiWiWiiiiii","best of the best Kishkibril","best of the best WiWiWiiiiii","best of the best Kishkibril"];
-const totalWords = 120;
+<button id="explosionButton">💥 Super Explosion</button>
 
+<!-- Музыка -->
+<audio id="bgMusic" loop>
+  <source src="your-song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const words = ["best of the best Kishkibril","best of the best WiWiWiiiiii"];
+const totalWords = 120;
+const mainH1 = document.querySelector('h1');
+const contact = document.querySelector('.contact');
+const allWords = [];
+
+// создаем хаотичные слова
 for(let i=0;i<totalWords;i++){
   let span = document.createElement("span");
   span.className="word";
   span.innerText = words[Math.floor(Math.random()*words.length)];
-
-  // случайная стартовая позиция
-  span.style.left = Math.random()*100 + "vw";
-  span.style.top = Math.random()*100 + "vh";
-
-  // случайный размер
-  span.style.fontSize = (15 + Math.random()*35) + "px";
-
-  // случайный цвет
-  span.style.color = `hsl(${Math.random()*360},70%,50%)`;
-
-  // случайный начальный поворот
-  let rot = Math.random()*360 - 180;
-  span.style.transform = `rotate(${rot}deg)`;
-
   document.body.appendChild(span);
+  allWords.push(span);
 
-  // анимация движения
-  function moveWord(){
+  function explode(){
     let x = Math.random()*100;
     let y = Math.random()*100;
-    let angle = Math.random()*360 - 180;
+
+    const h1Rect = mainH1.getBoundingClientRect();
+    const contactRect = contact.getBoundingClientRect();
+
+    if(!(x < h1Rect.left/window.innerWidth*100 || x > h1Rect.right/window.innerWidth*100 || y < h1Rect.top/window.innerHeight*100 || y > h1Rect.bottom/window.innerHeight*100)){
+      y += 5 + Math.random()*5;
+    }
+    if(!(x < contactRect.left/window.innerWidth*100 || x > contactRect.right/window.innerWidth*100 || y < contactRect.top/window.innerHeight*100 || y > contactRect.bottom/window.innerHeight*100)){
+      y += 5 + Math.random()*5;
+    }
+
     span.style.left = x + "vw";
     span.style.top = y + "vh";
-    span.style.transform = `rotate(${angle}deg)`;
-    setTimeout(moveWord, 4000 + Math.random()*3000); // каждые 4-7 секунд
+    span.style.fontSize = (12 + Math.random()*25) + "px";
+    span.style.color = `hsl(${Math.random()*360},70%,50%)`;
+    span.style.transform = `rotate(${Math.random()*360 - 180}deg)`;
+    span.style.opacity = 0.3 + Math.random()*0.7;
+    span.style.display = (Math.random() > 0.2) ? "block" : "none";
+
+    setTimeout(explode, 1000 + Math.random()*1000);
   }
-  moveWord();
+
+  explode();
 }
+
+// движение пальцем и мини-взрыв
+document.addEventListener("touchmove", (e)=>{
+  const touch = e.touches[0];
+  const tx = touch.clientX;
+  const ty = touch.clientY;
+
+  allWords.forEach(span=>{
+    const rect = span.getBoundingClientRect();
+    const dx = rect.left + rect.width/2 - tx;
+    const dy = rect.top + rect.height/2 - ty;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    if(dist < 150){
+      let angle = Math.random()*2*Math.PI;
+      let radius = 30 + Math.random()*100;
+      span.style.left = (span.offsetLeft + Math.cos(angle)*radius) + "px";
+      span.style.top = (span.offsetTop + Math.sin(angle)*radius) + "px";
+      span.style.color = `hsl(${Math.random()*360},70%,50%)`;
+      span.style.transform = `rotate(${Math.random()*360 - 180}deg) scale(${0.5 + Math.random()*1.5})`;
+      span.style.opacity = 0.3 + Math.random()*0.7;
+      if(Math.random() > 0.5){
+        span.style.display = "none";
+        setTimeout(()=>{span.style.display="block";}, 300 + Math.random()*400);
+      }
+    }
+
+    if(dist < 300){
+      let moveX = (tx - (rect.left + rect.width/2))/dist * 10;
+      let moveY = (ty - (rect.top + rect.height/2))/dist * 10;
+      span.style.left = (span.offsetLeft + moveX) + "px";
+      span.style.top = (span.offsetTop + moveY) + "px";
+    }
+  });
+});
+
+// кнопка супер-взрыва
+document.getElementById("explosionButton").addEventListener("click", ()=>{
+  allWords.forEach(span=>{
+    let angle = Math.random()*2*Math.PI;
+    let radius = 50 + Math.random()*200;
+    span.style.left = (span.offsetLeft + Math.cos(angle)*radius) + "px";
+    span.style.top = (span.offsetTop + Math.sin(angle)*radius) + "px";
+    span.style.color = `hsl(${Math.random()*360},70%,50%)`;
+    span.style.transform = `rotate(${Math.random()*360 - 180}deg) scale(${0.5 + Math.random()*1.5})`;
+    span.style.opacity = 0.3 + Math.random()*0.7;
+  });
+});
+
+// запуск музыки при клике (т.к. мобильные браузеры запрещают автозапуск)
+document.body.addEventListener("click", ()=>{
+  const music = document.getElementById("bgMusic");
+  if(music.paused){
+    music.play();
+  }
+}, {once:true});
 </script>
 
 </body>
